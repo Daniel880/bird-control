@@ -103,11 +103,11 @@ public:
 
     stepper_X.setCurrentPosition(0);
 
-    stepper_X.moveTo(-39);
-    stepper_X.setSpeed(-20);
-    while (stepper_X.distanceToGo() != 0) {
-      stepper_X.runSpeedToPosition();
-    }
+    // stepper_X.moveTo(-39);
+    // stepper_X.setSpeed(-20);
+    // while (stepper_X.distanceToGo() != 0) {
+    // stepper_X.runSpeedToPosition();
+    // }
 
     stepper_X.setCurrentPosition(0);
   }
@@ -153,6 +153,40 @@ public:
     Serial.print(stepper_X.currentPosition());
     Serial.print("\t");
     Serial.println(stepper_Y.currentPosition());
+  }
+
+  void testEndstop() {
+    while (true) {
+
+      stepper_X.setSpeed(50);
+      while (digitalRead(ENDSTOP_X) == HIGH) {
+        stepper_X.runSpeed();
+      }
+      Serial.print("X: ");
+      Serial.print(stepper_X.currentPosition());
+
+      stepper_X.setSpeed(-50);
+      while (digitalRead(ENDSTOP_X) == LOW) {
+        stepper_X.runSpeed();
+      }
+      Serial.print(" ");
+      Serial.print(stepper_X.currentPosition());
+
+      stepper_Y.setSpeed(-50);
+      while (digitalRead(ENDSTOP_Y) == HIGH) {
+        stepper_Y.runSpeed();
+      }
+      Serial.print(" Y: ");
+      Serial.print(stepper_Y.currentPosition());
+
+      stepper_Y.setSpeed(50);
+      while (digitalRead(ENDSTOP_Y) == LOW) {
+        stepper_Y.runSpeed();
+      }
+      Serial.print(" ");
+      Serial.print(stepper_Y.currentPosition());
+      Serial.println();
+    }
   }
 };
 #endif

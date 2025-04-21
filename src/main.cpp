@@ -8,6 +8,16 @@ StepperController stepperController;
 LaserModule laserModule;
 SerialParser serialParser;
 
+struct LaserPoint {
+  long x;
+  long y;
+  long time;
+};
+
+constexpr const size_t MAX_LASER_POINTS = 20;
+
+const LaserPoint laserPoints[MAX_LASER_POINTS] = {};
+
 void setup() {
   laserModule.off();
 
@@ -16,9 +26,6 @@ void setup() {
 
   pinMode(ENDSTOP_X, INPUT_PULLUP);
   pinMode(ENDSTOP_Y, INPUT_PULLUP);
-
-  pinMode(STEPPER_ENABLE, OUTPUT);
-  digitalWrite(STEPPER_ENABLE, LOW);
 
   stepperController.initTMC();
   stepperController.initAccelStepper();
@@ -29,31 +36,33 @@ void setup() {
 
   stepperController.setRunSettings();
   Serial.println("START");
+
+  stepperController.testEndstop();
 }
 
-long speed = 1000;
-uint16_t power = 0;
-uint8_t loopCnt = 0;
-long x = 1000;
-long y = 1000;
+uint8_t laserPointIndex = 0;
 
 void loop() {
-  if (loopCnt == 0) {
-    speed = 1000;
-    power = 10;
-    loopCnt++;
-  } else if (loopCnt == 1) {
-    speed = 5000;
-    power = 128;
-    loopCnt++;
-  } else {
-    speed = 10000;
-    power = 255;
-  }
 
-  laserModule.power(power);
-  stepperController.moveTo(500, 6700, speed);
-  stepperController.moveTo(640, 6260, speed);
+  Serial.print("Moving to laser point: idx: ");
+  Serial.print(laserPointIndex);
+  Serial.print("\t");
+  Serial.print(laserPoints[laserPointIndex].x);
+  Serial.print("\t");
+  Serial.print(laserPoints[laserPointIndex].y);
+  Serial.print("\t");
+  Serial.println(laserPoints[laserPointIndex].time);
+
+  stepperController.moveTo(laserPoints[laserPointIndex].x,
+                           laserPoints[laserPointIndex].y,
+                           laserPoints[laserPointIndex].time);
+
+  do {
+    laserPointIndex++;
+    if (laserPointIndex >= MAX_LASER_POINTS) {
+      laserPointIndex = 0;
+    }
+  } while (laserPoints[laserPointIndex].time == 0);
 
   // 0 relative
   // 1 absolute
