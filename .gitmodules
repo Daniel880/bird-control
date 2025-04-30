@@ -1,0 +1,6 @@
+[submodule "lib/TMC2209"]
+	path = lib/TMC2209
+	url = https://github.com/janelia-arduino/TMC2209.git
+[submodule "lib/AccelStepper"]
+	path = lib/AccelStepper
+	url = https://github.com/swissbyte/AccelStepper
