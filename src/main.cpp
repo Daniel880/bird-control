@@ -1,22 +1,12 @@
 #include "LaserModule.h"
+#include "LaserPoints.h" // Include the new patterns file
 #include "SerialParser.h"
 #include "StepperController.h"
 
 // Define a stepper and the pins it will use
-
 StepperController stepperController;
 LaserModule laserModule;
 SerialParser serialParser;
-
-struct LaserPoint {
-  long x;
-  long y;
-  long time;
-};
-
-constexpr const size_t MAX_LASER_POINTS = 20;
-
-const LaserPoint laserPoints[MAX_LASER_POINTS] = {};
 
 void setup() {
   laserModule.off();

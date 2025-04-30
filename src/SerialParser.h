@@ -33,7 +33,7 @@ public:
     }
   }
 
-  int numbers[10];
+  int numbers[10] = {0};
   int numCount = 0;
   String input = "";
 };
