@@ -43,9 +43,10 @@ public:
 
   void initTMC() {
     stepper_driver.setRunCurrent(100);
-    stepper_driver.setRMSCurrent(1500, 0.11, 1.0);
+    stepper_driver.setRMSCurrent(2500, 0.11, 1.0);
     stepper_driver.enableCoolStep();
     stepper_driver.enable();
+    stepper_driver.clearReset();
   }
 
   void setHommingSettings() { stepper_driver.setMicrostepsPerStep(1); }
@@ -65,7 +66,7 @@ public:
       stepper_Y.runSpeed();
     }
 
-    stepper_Y.setSpeed(-5);
+    stepper_Y.setSpeed(-2);
     while (digitalRead(ENDSTOP_Y) == HIGH) {
       stepper_Y.runSpeed();
     }
@@ -91,7 +92,7 @@ public:
       stepper_X.runSpeed();
     }
 
-    stepper_X.setSpeed(5);
+    stepper_X.setSpeed(2);
     while (digitalRead(ENDSTOP_X) == HIGH) {
       stepper_X.runSpeed();
     }

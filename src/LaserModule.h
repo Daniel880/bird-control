@@ -10,9 +10,14 @@ public:
   }
 
   void power(uint8_t power) {
-    analogWrite(LASER_EN, power);
-    Serial.print("Laser power: ");
-    Serial.println(power);
+    if (power > 200) {
+      digitalWrite(LASER_EN, HIGH);
+      Serial.println("Laser FULL POWER");
+    } else {
+      analogWrite(LASER_EN, power);
+      Serial.print("Laser power: ");
+      Serial.println(power);
+    }
   }
 
   void off() { analogWrite(LASER_EN, 0); }

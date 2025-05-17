@@ -9,10 +9,15 @@ LaserModule laserModule;
 SerialParser serialParser;
 
 void setup() {
-  laserModule.off();
-
   Serial.begin(115200);
   Serial.println("Start");
+
+  laserModule.off();
+  Serial.println("Waiting ...");
+
+  delay(3000);
+
+  Serial.println("RUN");
 
   pinMode(ENDSTOP_X, INPUT_PULLUP);
   pinMode(ENDSTOP_Y, INPUT_PULLUP);
@@ -27,7 +32,17 @@ void setup() {
   stepperController.setRunSettings();
   Serial.println("START");
 
-  stepperController.testEndstop();
+
+
+  // stepperController.testEndstop();
+
+  stepperController.moveTo(laserPoints[0].x, laserPoints[0].y,
+                           laserPoints[0].time);
+
+  laserModule.power(255);
+
+  delay(2000);
+
 }
 
 uint8_t laserPointIndex = 0;
@@ -51,6 +66,7 @@ void loop() {
     laserPointIndex++;
     if (laserPointIndex >= MAX_LASER_POINTS) {
       laserPointIndex = 0;
+      delay(200);
     }
   } while (laserPoints[laserPointIndex].time == 0);
 
